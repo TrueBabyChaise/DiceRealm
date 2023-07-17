@@ -6,7 +6,7 @@ DESC PROJECT
 
 # Before continuing...
 
-![Alt Text](https://tenor.com/view/oshi-no-ko-gif-5621277559403521520.gif)
+![Alt Text](https://media.tenor.com/9GtYOAcWbzYAAAAC/oshi-no-ko-anime.gif)
 
 # Branch
 
