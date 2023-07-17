@@ -1,9 +1,5 @@
 import * as PIXI from "pixi.js";
-export const game = (
-    height,
-    width,
-    nbOfExplosions,
-) => {
+export const game = (height, width, nbOfExplosions) => {
   const app = new PIXI.Application({
     autoStart: false,
     // resizeTo: window,
@@ -14,6 +10,32 @@ export const game = (
 
   document.onreadystatechange = () => {
     document.getElementById("game").appendChild(app.view);
+
+    PIXI.Assets.load("https://pixijs.com/assets/bg_grass.jpg").then(
+      (texture) => {
+        const plane = new PIXI.SimplePlane(texture, 10, 10);
+
+        plane.x = -10;
+        plane.y = -10;
+
+        app.stage.addChild(plane);
+
+        // Get the buffer for vertice positions.
+        const buffer = plane.geometry.getBuffer("aVertexPosition");
+
+        // Listen for animate update
+        let timer = 0;
+
+        app.ticker.add(() => {
+          // Randomize the vertice positions a bit to create movement.
+          for (let i = 0; i < buffer.data.length; i++) {
+            buffer.data[i] += Math.sin(timer / 10 + i) * 0.5;
+          }
+          buffer.update();
+          timer++;
+        });
+      }
+    );
 
     PIXI.Assets.load("https://pixijs.com/assets/spritesheet/mc.json").then(
       () => {
@@ -33,8 +55,8 @@ export const game = (
           // create an explosion AnimatedSprite
           const explosion = new PIXI.AnimatedSprite(explosionTextures);
 
-          explosion.x = Math.random() * app.screen.width;
-          explosion.y = Math.random() * app.screen.height;
+          explosion.x = Math.random() * app.screen.width / 4;
+          explosion.y = Math.random() * app.screen.height / 4;
           explosion.anchor.set(0.5);
           explosion.rotation = Math.random() * Math.PI;
           explosion.scale.set(0.75 + Math.random() * 0.5);
@@ -42,10 +64,11 @@ export const game = (
           app.stage.addChild(explosion);
         }
 
-        // start animating
-        app.start();
       }
     );
+
+    // start animating
+    app.start();
   };
 };
 export default game;
